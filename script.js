@@ -1,6 +1,6 @@
 // NOTE: Front-end "passwords" are not truly secure on static sites.
 // For casual privacy, this is fine.
-const PASSWORD = "yourconstellationnowandforever'
+const PASSWORD = "yourconstellationnowandforever';
 
 const messages = [
   "Message 1: I love you.",
