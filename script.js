@@ -1,5 +1,5 @@
 // ===== PASSWORD =====
-const PASSWORD = "yourconstellationnowandforever";
+const PASSWORD = "1234";
 
 // ===== MESSAGES (sample 100) =====
 const messages = [
