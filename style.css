@@ -1,3 +1,5 @@
+.hidden { display:none !important; }
+
 /* ===== Base layout ===== */
 body{
   margin:0;
@@ -7,8 +9,6 @@ body{
   place-items:center;
   background:#faf7ff;
 }
-
-.hidden{ display:none; }
 
 main{
   text-align:center;
@@ -24,8 +24,6 @@ main{
   box-shadow:0 10px 30px rgba(0,0,0,.08);
   text-align:center;
 }
-
-.gate h1{ margin:0 0 14px; }
 
 .gate input{
   width:min(320px, 80%);
@@ -58,7 +56,6 @@ main{
   box-shadow:0 10px 30px rgba(0,0,0,.10);
   transition: transform .15s ease;
 }
-
 .jar:active{ transform: scale(.98); }
 
 /* ===== Paper field ===== */
@@ -84,17 +81,13 @@ main{
   cursor:pointer;
   user-select:none;
   overflow:hidden;
-
   transform: rotate(var(--rot, 0deg));
   transition: transform .18s ease, opacity .25s ease, box-shadow .18s ease;
 }
-
 .paper:hover{
   transform: rotate(var(--rot, 0deg)) scale(1.06);
   box-shadow:0 14px 26px rgba(0,0,0,.18);
 }
-
-/* folded corner */
 .paper::after{
   content:"";
   position:absolute;
@@ -105,8 +98,6 @@ main{
   border-left:18px solid transparent;
   border-bottom:18px solid rgba(0,0,0,.08);
 }
-
-/* ===== Preview text (Times New Roman) ===== */
 .paper .preview{
   padding:10px;
   font-family: "Times New Roman", Times, serif;
@@ -114,14 +105,11 @@ main{
   color:rgba(0,0,0,.85);
   line-height:1.25;
   font-style: italic;
-
   display:-webkit-box;
   -webkit-line-clamp:2;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
-
-/* opened look */
 .paper.opened{
   transform: rotate(0deg) scale(1.15);
   z-index: 5;
@@ -136,7 +124,6 @@ main{
   background:rgba(0,0,0,.35);
   padding:18px;
 }
-
 .card{
   width:min(520px, 92vw);
   background:white;
@@ -145,7 +132,6 @@ main{
   box-shadow:0 20px 60px rgba(0,0,0,.25);
   position:relative;
 }
-
 .close{
   position:absolute;
   top:10px;
@@ -156,12 +142,11 @@ main{
   padding:6px 10px;
   cursor:pointer;
 }
-
-/* ===== Full message (Times New Roman letter style) ===== */
 .modalText{
   font-family: "Times New Roman", Times, serif;
   font-size:19px;
   line-height:1.6;
   padding-top:10px;
+  color:#111;
   white-space:pre-wrap;
 }
