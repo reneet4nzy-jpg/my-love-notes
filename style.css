@@ -73,7 +73,7 @@ main{
 /* ================================================= */
 
 .papers{
-  width:100%;
+  width:80%;
   height:520px;
   margin-top:20px;
   position:relative;
@@ -134,24 +134,19 @@ main{
 }
 
 /* ================================================= */
-/* MODAL + UNFOLDING LETTER                         */
+/* PARCHMENT LETTER (Centered Text + Proper X)      */
 /* ================================================= */
 
-.modal{
-  position:fixed;
-  inset:0;
-  display:grid;
-  place-items:center;
-  background:rgba(0,0,0,.35);
-  padding:18px;
-}
-
-/* parchment letter card */
 .card{
   width:min(720px, 94vw);
-  min-height: 320px;
+  min-height: 420px;
   position:relative;
-  padding:42px 46px 44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:80px 80px;
 
   background-image: url("parchment.png");
   background-size: 100% 100%;
@@ -172,24 +167,29 @@ main{
   opacity: 1;
 }
 
+/* CENTERED LETTER TEXT */
 .modalText{
   font-family: "Times New Roman", Times, serif;
-  font-size:20px;
-  line-height:1.7;
+  font-size:28px;
+  line-height:1.6;
+  text-align:center;
   color: rgba(45, 25, 10, .94);
+  max-width: 70%;
   white-space:pre-wrap;
   text-shadow: 0 1px 0 rgba(255,255,255,.35);
 }
 
-/* close button */
+/* X button positioned on parchment */
 .close{
   position:absolute;
-  top:14px;
-  right:16px;
-  border:0;
-  background:rgba(0,0,0,.08);
-  border-radius:10px;
-  padding:6px 10px;
+  top:40px;
+  right:50px;
+
+  border:none;
+  background:transparent;
+  font-size:20px;
+  font-weight:bold;
   cursor:pointer;
-  font-size:14px;
+
+  color: rgba(60,40,20,.9);
 }
