@@ -74,45 +74,32 @@ main{
   padding:14px 18px;
   cursor:pointer;
   box-shadow:0 10px 30px rgba(0,0,0,.10);
-  transition: transform .15s ease;
 }
 .jar:active{ transform: scale(.98); }
 
-/* STAGE (scrollable rows tray) */
+/* PAPERS AREA */
 .papers{
   position:relative;
   width:min(820px, 94vw);
   height:520px;
-  margin:0 auto;
   border-radius:18px;
   background:rgba(255,255,255,.65);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   overflow:hidden;
 }
 
-/* after spill, become a scroll tray */
+/* tray mode (scroll grid) */
 .papers.tray{
   overflow:auto;
   padding:18px;
 }
-.papers.tray::before{
-  content:"";
-  position:sticky;
-  top:0;
-  display:block;
-  height:10px;
-}
-
-/* grid of notes in tray mode */
 .papersGrid{
   display:grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap:14px;
 }
 
-/* NOTE */
-/* ===== REPLACE your .paper / hover / opened with this ===== */
-
+/* NOTE (transform vars so tilt never gets overwritten) */
 .paper{
   position:absolute;
   width:140px;
@@ -125,9 +112,9 @@ main{
   background-position: center;
   background-repeat: no-repeat;
 
-  /* lighter, softer shadow */
-  box-shadow: 0 3px 6px rgba(0,0,0,.08);
-
+  /* IMPORTANT: no filter shadow (filters stack badly) */
+  filter:none;
+  box-shadow:none;              /* <-- OFF by default */
   will-change: transform;
 
   --tx: 0px;
@@ -136,17 +123,42 @@ main{
   --sc: 1;
 
   transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--sc));
-  transition: transform .2s ease, box-shadow .2s ease, opacity .25s ease;
+  transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
 }
 
-.paper:hover{
-  --sc: 1.04;
-  box-shadow: 0 6px 10px rgba(0,0,0,.12);
+/* while flying: absolutely no shadow */
+.paper.flying{
+  box-shadow:none !important;
+  filter:none !important;
 }
 
-.paper.opened{
-  --sc: 1.08;
-  z-index:5;
+/* once in tray/grid: shadows ON (nice and clean) */
+.papers.tray .paper{
+  position:relative;
+  left:auto !important;
+  top:auto !important;
+  --tx: 0px !important;
+  --ty: 0px !important;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,.14);
+}
+
+.paper:hover{ --sc: 1.04; }
+.paper.opened{ --sc: 1.08; z-index:5; }
+
+.paper .preview{
+  padding:18px 16px;
+  font-family: "Times New Roman", Times, serif;
+  font-size:14px;
+  line-height:1.2;
+  font-style: italic;
+  color: rgba(45, 25, 10, .92);
+  text-align:center;
+
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 
 /* MODAL */
@@ -205,8 +217,4 @@ main{
   font-weight:bold;
   cursor:pointer;
   color: rgba(60,40,20,.9);
-}
-
-.paper.settling{
-  transition: transform 900ms cubic-bezier(.2,.9,.2,1);
 }
