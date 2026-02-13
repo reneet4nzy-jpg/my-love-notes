@@ -221,3 +221,7 @@ main{
   cursor:pointer;
   color: rgba(60,40,20,.9);
 }
+
+.paper{
+  background-color: red;
+}
