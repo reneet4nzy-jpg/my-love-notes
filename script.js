@@ -1,8 +1,11 @@
+// NOTE: Front-end passwords aren't truly secure on static sites.
+// For casual privacy, it's fine.
 const PASSWORD = "1234";
 
 let spilled = false;
 let lastOpenedPaper = null;
 
+// Replace later with your real 100 messages.
 const messages = [
   "You are my favourite hello and my hardest goodbye.",
   "I love the way your eyes soften when you smile.",
@@ -33,6 +36,7 @@ const modal = document.getElementById("modal");
 const modalText = document.getElementById("modalText");
 const closeModal = document.getElementById("closeModal");
 
+// Ensure modal starts hidden even if CSS loads late
 modal.classList.add("hidden");
 
 // Password gate
@@ -41,14 +45,15 @@ enterBtn.addEventListener("click", () => {
     gate.classList.add("hidden");
     app.classList.remove("hidden");
   } else {
-    gateMsg.textContent = "Wrong password 😭";
+    gateMsg.textContent = "typo perchance? insert sad hampter";
   }
 });
+
 pw.addEventListener("keydown", (e) => {
   if (e.key === "Enter") enterBtn.click();
 });
 
-// Jar click
+// Jar click: hide title, tip jar, then spill
 jar.addEventListener("click", () => {
   if (spilled) return;
   spilled = true;
@@ -56,15 +61,13 @@ jar.addEventListener("click", () => {
   if (jarTitle) jarTitle.style.display = "none";
   jarWrap.classList.add("tipped");
 
-  setTimeout(() => {
-    spillPhysicsThenSettle();
-  }, 450);
+  setTimeout(() => spillPhysicsThenSettle(), 450);
 });
 
 function spillPhysicsThenSettle() {
   papersWrap.innerHTML = "";
 
-  // build exactly 100 notes (repeat demo messages)
+  // build exactly 100 notes (repeat demo messages if needed)
   const pool = [];
   while (pool.length < 100) pool.push(...messages);
   pool.length = 100;
@@ -99,7 +102,6 @@ function spillPhysicsThenSettle() {
 
     const rot = rand(-25, 25);
 
-    // start with small random offsets and velocity
     const s = {
       el: p,
       rot,
@@ -107,11 +109,9 @@ function spillPhysicsThenSettle() {
       y: 0,
       vx: rand(5, 12) + Math.random(),     // pour right
       vy: rand(-3, 4) + Math.random(),
-      active: true
+      startAt: performance.now() + i * 12
     };
 
-    // stagger release so it pours
-    s.startAt = performance.now() + i * 12;
     states.push(s);
   }
 
@@ -154,22 +154,20 @@ function spillPhysicsThenSettle() {
     if (t < PHYS_MS) {
       requestAnimationFrame(physicsTick);
     } else {
-      // start the gentle "magnet into grid" phase
-      settleIntoGrid(states, mouthX, mouthY, W);
+      settleIntoGrid(states, mouthX, mouthY);
     }
   }
 
   requestAnimationFrame(physicsTick);
 }
 
-// Smoothly animate each note into its final grid slot
-function settleIntoGrid(states, mouthX, mouthY, W) {
-  // build target grid positions (like auto-fill)
+// Smoothly animate each note into its final grid slot (with slight slant)
+function settleIntoGrid(states, mouthX, mouthY) {
   const gap = 14;
   const tileW = 140;
   const tileH = 96;
 
-  const usableW = papersWrap.clientWidth - 36; // tray padding we will add later
+  const usableW = papersWrap.clientWidth - 36;
   const cols = Math.max(1, Math.floor((usableW + gap) / (tileW + gap)));
 
   const targets = states.map((s, i) => {
@@ -179,49 +177,48 @@ function settleIntoGrid(states, mouthX, mouthY, W) {
     const tx = 18 + col * (tileW + gap);
     const ty = 18 + row * (tileH + gap);
 
-    // convert to translate coords relative to mouth anchor
+    // permanent slight slant
+    const finalRot = rand(-7, 7);
+
     return {
       s,
       x: tx - mouthX,
-      y: ty - mouthY
+      y: ty - mouthY,
+      rot: finalRot
     };
   });
 
-  // add a class so transform transitions smoothly
   for (const { s } of targets) {
     s.el.classList.remove("flying");
     s.el.classList.add("settling");
     s.el.style.opacity = 1;
-    // also slowly reduce rotation while settling
-    s.rot = rand(-6, 6);
   }
 
-  // animate to targets with slight staggering for “organic” feel
-  targets.forEach(({ s, x, y }, i) => {
-    const delay = i * 6; // tiny cascade
+  targets.forEach(({ s, x, y, rot }, i) => {
+    const delay = i * 6;
     setTimeout(() => {
-      s.el.style.transform = `translate(${x}px, ${y}px) rotate(${s.rot}deg)`;
+      s.el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+      s.finalRotation = rot;
     }, delay);
   });
 
-  // after they finish settling, convert to real scroll grid without a visual jump
-  setTimeout(() => {
-    convertToScrollableGrid(states);
-  }, 1050);
+  setTimeout(() => convertToScrollableGrid(states), 1050);
 }
 
+// Convert to scrollable grid WITHOUT snapping (keep tilt)
 function convertToScrollableGrid(states) {
-  // turn into scroll tray + grid wrapper
   papersWrap.classList.add("tray");
 
   const grid = document.createElement("div");
   grid.className = "papersGrid";
 
-  // Move elements into grid
-  // (they're already visually in place; this keeps layout stable for scrolling)
-  states.forEach(({ el }) => {
+  states.forEach(({ el, finalRotation }) => {
     el.classList.remove("settling");
-    el.style.transform = ""; // grid will handle positioning now
+
+    // keep the same rotation in grid
+    const rot = (typeof finalRotation === "number") ? finalRotation : rand(-7, 7);
+    el.style.transform = `rotate(${rot}deg)`;
+
     grid.appendChild(el);
   });
 
@@ -263,6 +260,7 @@ function closeModalFn() {
 function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 function escapeHtml(str) {
   return str.replace(/[&<>"']/g, (c) => ({
     "&":"&amp;",
