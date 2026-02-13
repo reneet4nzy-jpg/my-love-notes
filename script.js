@@ -1,5 +1,3 @@
-alert("JS is running");
-
 const PASSWORD = "1234";
 
 let spilled = false;
@@ -10,7 +8,7 @@ const messages = [
   "I love the way your eyes soften when you smile.",
   "You make ordinary days feel like magic.",
 
-  "You miss me and I’m not responding.\n\nHii babyy, I’m sorry. I must be busy for you to be here, but scroll around here until I’m back.\n\nI put little bits of me in all of these, so this might as well count as my presence.\n\nEnjoy scrolling, my love.",
+  "U miss me but I’m busy.\n\nHii babyy, I’m sorry. I must be busy for you to be here, but scroll around here until I’m back?\n\nI put little bits of me in all of these, so this might as well count as my presence.\n\nEnjoy scrolling, my love.",
 
   "Your laugh is my favourite sound."
 ];
