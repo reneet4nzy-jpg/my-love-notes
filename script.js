@@ -186,8 +186,13 @@ function settleIntoGrid(states, mouthX, mouthY) {
   const tileW = 150;
   const tileH = 110;
 
-  const usableW = papersWrap.clientWidth - 36;
-  const cols = Math.max(1, Math.floor((usableW + gap) / (tileW + gap)));
+const w = papersWrap.clientWidth;
+
+// phone/tablet/desktop column rules
+let cols = 6;
+if (w < 520) cols = 2;       // phones
+else if (w < 820) cols = 3;  // small tablets
+else cols = 6;               // desktop
 
   states.forEach((s, i) => {
     const col = i % cols;
