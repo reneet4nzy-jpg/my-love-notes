@@ -125,22 +125,23 @@ main{
   background-position: center;
   background-repeat: no-repeat;
 
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.14));
+  /* lighter, softer shadow */
+  box-shadow: 0 3px 6px rgba(0,0,0,.08);
+
   will-change: transform;
 
-  /* transform parts */
   --tx: 0px;
   --ty: 0px;
   --rot: 0deg;
   --sc: 1;
 
   transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--sc));
-  transition: transform .2s ease, filter .2s ease, opacity .25s ease;
+  transition: transform .2s ease, box-shadow .2s ease, opacity .25s ease;
 }
 
 .paper:hover{
   --sc: 1.04;
-  filter: drop-shadow(0 10px 16px rgba(0,0,0,.18));
+  box-shadow: 0 6px 10px rgba(0,0,0,.12);
 }
 
 .paper.opened{
