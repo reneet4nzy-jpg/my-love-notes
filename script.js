@@ -1,4 +1,4 @@
-const PASSWORD = "1234";
+const PASSWORD = "yourimmortallisedconstellationforever";
 
 let spilled = false;
 let lastOpenedPaper = null;
@@ -6,7 +6,7 @@ let lastOpenedPaper = null;
 const messages = [
   "You are my favourite hello and my hardest goodbye.",
   "I love the way your eyes soften when you smile.",
-  "You need to know how much i love you.\n\nremember that i love you so much that wed be immortalised as constellations after we die because of how much i love you. death shall not do us part."
+  "You need to know how much i love you.\n\nremember that i love you so much that wed be immortalised as constellations after we die because of how much i love you. death shall not do us part.",
 
   {
     preview: "You need a kiss",
