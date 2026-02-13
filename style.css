@@ -14,8 +14,11 @@ body{
 }
 
 main{
-  text-align:center;
-  width:min(980px, 94vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
 }
 
 /* ================================================= */
@@ -108,9 +111,14 @@ main{
 
 /* papers fill entire scene */
 .papers{
-  position:absolute;
-  inset:0;
-  pointer-events:none; /* allows clicking jar */
+  position:relative;
+  width:720px;              /* fixed stage width */
+  height:520px;
+  margin:40px auto 0 auto;  /* center horizontally */
+  border-radius:18px;
+  background:rgba(255,255,255,.65);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  overflow:hidden;
 }
 
 /* papers themselves clickable */
