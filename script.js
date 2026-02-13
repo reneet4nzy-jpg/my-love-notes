@@ -1,11 +1,10 @@
-// NOTE: Front-end passwords aren't truly secure on static sites.
-// For casual privacy, it's fine.
+// ===== REPLACE YOUR ENTIRE script.js WITH THIS =====
+
 const PASSWORD = "1234";
 
 let spilled = false;
 let lastOpenedPaper = null;
 
-// Replace later with your real 100 messages.
 const messages = [
   "You are my favourite hello and my hardest goodbye.",
   "I love the way your eyes soften when you smile.",
@@ -36,7 +35,6 @@ const modal = document.getElementById("modal");
 const modalText = document.getElementById("modalText");
 const closeModal = document.getElementById("closeModal");
 
-// Ensure modal starts hidden even if CSS loads late
 modal.classList.add("hidden");
 
 // Password gate
@@ -48,12 +46,11 @@ enterBtn.addEventListener("click", () => {
     gateMsg.textContent = "typo perchance? insert sad hampter";
   }
 });
-
 pw.addEventListener("keydown", (e) => {
   if (e.key === "Enter") enterBtn.click();
 });
 
-// Jar click: hide title, tip jar, then spill
+// Jar click
 jar.addEventListener("click", () => {
   if (spilled) return;
   spilled = true;
@@ -84,7 +81,6 @@ function spillPhysicsThenSettle() {
   const PAPER_W = 140;
   const PAPER_H = 96;
 
-  // create papers + physics state
   const states = [];
 
   for (let i = 0; i < pool.length; i++) {
@@ -97,6 +93,11 @@ function spillPhysicsThenSettle() {
 
     p.style.left = mouthX + "px";
     p.style.top = mouthY + "px";
+
+    // initial CSS vars
+    p.style.setProperty("--tx", `0px`);
+    p.style.setProperty("--ty", `0px`);
+
     p.addEventListener("click", () => openMessage(msg, p));
     papersWrap.appendChild(p);
 
@@ -107,15 +108,17 @@ function spillPhysicsThenSettle() {
       rot,
       x: 0,
       y: 0,
-      vx: rand(5, 12) + Math.random(),     // pour right
+      vx: rand(5, 12) + Math.random(),
       vy: rand(-3, 4) + Math.random(),
       startAt: performance.now() + i * 12
     };
 
+    // set initial rotation var
+    p.style.setProperty("--rot", `${rot}deg`);
+
     states.push(s);
   }
 
-  // physics loop for ~2.2s
   const gravity = 0.38;
   const friction = 0.992;
   const bounce = 0.72;
@@ -134,7 +137,6 @@ function spillPhysicsThenSettle() {
     for (const s of states) {
       if (now < s.startAt) continue;
 
-      // physics integration
       s.vy += gravity;
       s.vx *= friction;
       s.vy *= friction;
@@ -142,13 +144,15 @@ function spillPhysicsThenSettle() {
       s.x += s.vx;
       s.y += s.vy;
 
-      // bounce off walls
       if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
       if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
       if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
       if (s.y > maxY) { s.y = maxY; s.vy *= -bounce; }
 
-      s.el.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.rot}deg)`;
+      // update CSS vars (keeps tilt!)
+      s.el.style.setProperty("--tx", `${s.x}px`);
+      s.el.style.setProperty("--ty", `${s.y}px`);
+      s.el.style.setProperty("--rot", `${s.rot}deg`);
     }
 
     if (t < PHYS_MS) {
@@ -161,7 +165,6 @@ function spillPhysicsThenSettle() {
   requestAnimationFrame(physicsTick);
 }
 
-// Smoothly animate each note into its final grid slot (with slight slant)
 function settleIntoGrid(states, mouthX, mouthY) {
   const gap = 14;
   const tileW = 140;
@@ -177,15 +180,9 @@ function settleIntoGrid(states, mouthX, mouthY) {
     const tx = 18 + col * (tileW + gap);
     const ty = 18 + row * (tileH + gap);
 
-    // permanent slight slant
     const finalRot = rand(-7, 7);
 
-    return {
-      s,
-      x: tx - mouthX,
-      y: ty - mouthY,
-      rot: finalRot
-    };
+    return { s, x: tx - mouthX, y: ty - mouthY, rot: finalRot };
   });
 
   for (const { s } of targets) {
@@ -197,7 +194,9 @@ function settleIntoGrid(states, mouthX, mouthY) {
   targets.forEach(({ s, x, y, rot }, i) => {
     const delay = i * 6;
     setTimeout(() => {
-      s.el.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+      s.el.style.setProperty("--tx", `${x}px`);
+      s.el.style.setProperty("--ty", `${y}px`);
+      s.el.style.setProperty("--rot", `${rot}deg`);
       s.finalRotation = rot;
     }, delay);
   });
@@ -205,7 +204,6 @@ function settleIntoGrid(states, mouthX, mouthY) {
   setTimeout(() => convertToScrollableGrid(states), 1050);
 }
 
-// Convert to scrollable grid WITHOUT snapping (keep tilt)
 function convertToScrollableGrid(states) {
   papersWrap.classList.add("tray");
 
@@ -215,9 +213,10 @@ function convertToScrollableGrid(states) {
   states.forEach(({ el, finalRotation }) => {
     el.classList.remove("settling");
 
-    // keep the same rotation in grid
     const rot = (typeof finalRotation === "number") ? finalRotation : rand(-7, 7);
-    el.style.transform = `rotate(${rot}deg)`;
+    el.style.setProperty("--tx", `0px`);
+    el.style.setProperty("--ty", `0px`);
+    el.style.setProperty("--rot", `${rot}deg`);
 
     grid.appendChild(el);
   });
