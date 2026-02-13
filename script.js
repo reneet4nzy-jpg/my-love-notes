@@ -54,7 +54,7 @@ jar.addEventListener("click", () => {
   spilled = true;
 
   if (jarTitle) jarTitle.style.display = "none";
-  jarWrap.classList.add("tipped");
+  if (jarWrap) jarWrap.classList.add("tipped");
 
   setTimeout(() => spillPhysicsThenSettle(), 450);
 });
@@ -62,22 +62,22 @@ jar.addEventListener("click", () => {
 function spillPhysicsThenSettle() {
   papersWrap.innerHTML = "";
 
-  // build 100 notes (repeat demo messages for now)
+  // Build exactly 100 notes (repeat demo messages for now)
   const pool = [];
   while (pool.length < 100) pool.push(...messages);
   pool.length = 100;
 
-  // get container size
+  // Container size
   const W = papersWrap.clientWidth;
   const H = papersWrap.clientHeight;
 
-  // jar mouth position inside papers
+  // Jar mouth position INSIDE papers (container coords)
   const papersRect = papersWrap.getBoundingClientRect();
-  const jarRect = jarWrap.getBoundingClientRect();
+  const jarRect = (jarWrap || jar).getBoundingClientRect();
   const mouthX = (jarRect.left + jarRect.width / 2) - papersRect.left + 45;
   const mouthY = (jarRect.top + jarRect.height / 2) - papersRect.top + 10;
 
-  // Create ONE temp paper to measure real size
+  // Measure real paper size
   const temp = document.createElement("div");
   temp.className = "paper";
   temp.style.left = "0px";
@@ -85,21 +85,20 @@ function spillPhysicsThenSettle() {
   temp.style.opacity = "0";
   temp.innerHTML = `<div class="preview">test</div>`;
   papersWrap.appendChild(temp);
-
   const PAPER_W = temp.offsetWidth || 140;
   const PAPER_H = temp.offsetHeight || 96;
   temp.remove();
 
-  // Physics settings (bouncy!)
+  // Physics (container coords: x,y are absolute inside papers)
   const gravity = 0.95;
   const friction = 0.988;
   const bounce = 0.90;
 
-  // IMPORTANT: floor/ceiling based on REAL paper size
-  const minX = -mouthX + 8;
-  const maxX = (W - PAPER_W) - mouthX - 8;
-  const minY = -mouthY + 8;
-  const maxY = (H - PAPER_H) - mouthY - 8;
+  // REAL walls/floor in container coords
+  const minX = 8;
+  const maxX = W - PAPER_W - 8;
+  const minY = 8;
+  const maxY = H - PAPER_H - 8;  // <-- true bottom edge
 
   const states = [];
 
@@ -110,14 +109,16 @@ function spillPhysicsThenSettle() {
     const el = document.createElement("div");
     el.className = "paper flying";
     el.innerHTML = `<div class="preview">${escapeHtml(preview)}</div>`;
-    el.style.left = mouthX + "px";
-    el.style.top = mouthY + "px";
+
+    // IMPORTANT: we now position papers using absolute container coords,
+    // so left/top of element is 0,0 and we move with --tx/--ty only.
+    el.style.left = "0px";
+    el.style.top = "0px";
 
     const rot = rand(-25, 25);
-
-    el.style.setProperty("--tx", `0px`);
-    el.style.setProperty("--ty", `0px`);
     el.style.setProperty("--rot", `${rot}deg`);
+    el.style.setProperty("--tx", `${mouthX}px`);
+    el.style.setProperty("--ty", `${mouthY}px`);
 
     el.addEventListener("click", () => openMessage(msg, el));
     papersWrap.appendChild(el);
@@ -125,9 +126,10 @@ function spillPhysicsThenSettle() {
     states.push({
       el,
       rot,
-      x: 0,
-      y: 0,
-      vx: rand(8, 18) + Math.random(),   // more push out of jar
+      msg,
+      x: mouthX,
+      y: mouthY,
+      vx: rand(8, 18) + Math.random(),
       vy: rand(-6, 8) + Math.random(),
       startAt: performance.now() + i * 8
     });
@@ -150,22 +152,22 @@ function spillPhysicsThenSettle() {
       s.x += s.vx;
       s.y += s.vy;
 
-      // wall bounce
+      // Wall bounce
       if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
       if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
 
-      // ceiling bounce
+      // Ceiling bounce
       if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
 
-      // FLOOR bounce (real bottom!)
+      // FLOOR bounce (true bottom)
       if (s.y > maxY) {
         s.y = maxY;
         s.vy *= -bounce;
 
-        // give it a pop if it would “die” on the floor
+        // pop so it visibly bounces
         if (Math.abs(s.vy) < 2.2) s.vy = -rand(4, 10);
 
-        // sideways scatter so they don’t pile
+        // scatter
         s.vx += rand(-3, 3);
       }
 
@@ -175,39 +177,38 @@ function spillPhysicsThenSettle() {
     }
 
     if (t < PHYS_MS) requestAnimationFrame(tick);
-    else settleIntoGrid(states, mouthX, mouthY);
+    else settleIntoGrid(states, PAPER_W, PAPER_H);
   }
 
   requestAnimationFrame(tick);
 }
 
-function settleIntoGrid(states, mouthX, mouthY) {
+function settleIntoGrid(states, PAPER_W, PAPER_H) {
   const gap = 14;
-  const tileW = 150;
-  const tileH = 110;
 
-const w = papersWrap.clientWidth;
-
-// phone/tablet/desktop column rules
-let cols = 6;
-if (w < 520) cols = 2;       // phones
-else if (w < 820) cols = 3;  // small tablets
-else cols = 6;               // desktop
+  // --- Column rules (NO 5->6 jump on laptop) ---
+  // Desktop/laptop: 6 columns always
+  // Phones: 2 cols, small tablets: 3 cols
+  const w = papersWrap.clientWidth;
+  let cols = 6;
+  if (w < 520) cols = 2;
+  else if (w < 820) cols = 3;
+  else cols = 6;
 
   states.forEach((s, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
 
-    const tx = 18 + col * (tileW + gap);
-    const ty = 18 + row * (tileH + gap);
+    const tx = 18 + col * (PAPER_W + gap);
+    const ty = 18 + row * (PAPER_H + gap);
 
     const finalRot = rand(-7, 7);
     s.finalRotation = finalRot;
 
     setTimeout(() => {
       s.el.classList.remove("flying");
-      s.el.style.setProperty("--tx", `${tx - mouthX}px`);
-      s.el.style.setProperty("--ty", `${ty - mouthY}px`);
+      s.el.style.setProperty("--tx", `${tx}px`);
+      s.el.style.setProperty("--ty", `${ty}px`);
       s.el.style.setProperty("--rot", `${finalRot}deg`);
     }, i * 6);
   });
