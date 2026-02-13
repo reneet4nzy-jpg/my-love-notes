@@ -79,12 +79,15 @@ main{
 
 /* PAPERS AREA */
 .papers{
-  position:relative;
-  width:min(820px, 94vw);
+  width:100%;
   height:520px;
-  border-radius:18px;
-  background:rgba(255,255,255,.65);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  margin-top:20px;
+  position:relative;
+
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+
   overflow:hidden;
 }
 
