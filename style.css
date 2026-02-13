@@ -77,17 +77,22 @@ main{
 }
 .jar:active{ transform: scale(.98); }
 
-/* PAPERS AREA */
-
-/* PAPERS AREA */
+/* ================================================= */
+/* PAPERS AREA (container box is BACK)               */
+/* ================================================= */
 .papers{
   width:100%;
   height:520px;
   margin-top:20px;
   position:relative;
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
+
+  /* container background */
+  background: rgba(255,255,255,.65);
+  border-radius:18px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,.06),
+    0 18px 45px rgba(0,0,0,.08);
+
   overflow:hidden;
 }
 
@@ -95,13 +100,25 @@ main{
 .papers.tray{
   overflow:auto;
   padding:18px;
+
+  /* makes phone scrolling feel good */
+  -webkit-overflow-scrolling: touch;
+
+  /* prevents sideways scroll */
+  overflow-x:hidden;
 }
 
+/* GRID: responsive + 6 columns on big screens */
 .papersGrid{
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap:14px;
-  background: transparent !important;
+  background: transparent;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+/* lock 6 columns on desktop */
+@media (min-width: 1000px){
+  .papersGrid{ grid-template-columns: repeat(6, 1fr); }
 }
 
 /* NOTE */
@@ -138,7 +155,7 @@ main{
   filter:none !important;
 }
 
-/* once in tray/grid: shadows ON (nice and clean) */
+/* once in tray/grid */
 .papers.tray .paper{
   position:relative;
   left:auto !important;
@@ -146,8 +163,13 @@ main{
   --tx: 0px !important;
   --ty: 0px !important;
 
-  background-color: transparent !important; /* KEEP transparent in grid */
+  background-color: transparent !important;
   box-shadow: 0 6px 14px rgba(0,0,0,.14);
+}
+
+/* keep them a little slanted in tray */
+.papers.tray .paper{
+  transform: rotate(var(--rot)) scale(var(--sc));
 }
 
 .paper:hover{ --sc: 1.04; }
@@ -224,8 +246,4 @@ main{
   font-weight:bold;
   cursor:pointer;
   color: rgba(60,40,20,.9);
-}
-
-.papers.tray .paper{
-  background-color: transparent !important;
 }
