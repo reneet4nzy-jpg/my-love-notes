@@ -112,9 +112,9 @@ function spillPhysicsThenSettle() {
     });
   }
 
-  const gravity = 0.40;
-  const friction = 0.992;
-  const bounce = 0.72;
+ const gravity = 0.85;     // stronger fall
+const friction = 0.985;   // less damping
+const bounce = 0.88;      // bouncier walls/floor
 
   const minX = -mouthX + 10;
   const maxX = (W - PAPER_W) - mouthX - 10;
@@ -137,10 +137,26 @@ function spillPhysicsThenSettle() {
       s.x += s.vx;
       s.y += s.vy;
 
-      if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
-      if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
-      if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
-      if (s.y > maxY) { s.y = maxY; s.vy *= -bounce; }
+    if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
+if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
+
+if (s.y < minY) {
+  s.y = minY;
+  s.vy *= -bounce;
+}
+
+if (s.y > maxY) {
+  s.y = maxY;
+
+  // bounce upward
+  s.vy *= -bounce;
+
+  // add a little “pop” so it actually lifts
+  if (Math.abs(s.vy) < 2.5) s.vy = -rand(3, 7);
+
+  // add some sideways scatter so they don’t stack perfectly
+  s.vx += rand(-2, 2);
+}
 
       s.el.style.setProperty("--tx", `${s.x}px`);
       s.el.style.setProperty("--ty", `${s.y}px`);
