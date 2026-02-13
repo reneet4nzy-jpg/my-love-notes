@@ -1,9 +1,8 @@
-const PASSWORD = "1234";
+const PASSWORD = "yourconstellationnowandforever";
 
 let spilled = false;
 let lastOpenedPaper = null;
 
-// Replace later with your real 100 messages.
 const messages = [
   "You are my favourite hello and my hardest goodbye.",
   "I love the way your eyes soften when you smile.",
@@ -36,7 +35,7 @@ const closeModal = document.getElementById("closeModal");
 
 modal.classList.add("hidden");
 
-// Password
+// Password gate
 enterBtn.addEventListener("click", () => {
   if (pw.value === PASSWORD) {
     gate.classList.add("hidden");
@@ -58,31 +57,33 @@ jar.addEventListener("click", () => {
   jarWrap.classList.add("tipped");
 
   setTimeout(() => {
-    spillBurstThenArrange();
+    spillPhysicsThenSettle();
   }, 450);
 });
 
-function spillBurstThenArrange() {
-  // clear old
+function spillPhysicsThenSettle() {
   papersWrap.innerHTML = "";
 
-  // build exactly 100 notes (repeat if needed for demo)
+  // build exactly 100 notes (repeat demo messages)
   const pool = [];
   while (pool.length < 100) pool.push(...messages);
   pool.length = 100;
 
-  // jar mouth position inside papers
-  const papersRect = papersWrap.getBoundingClientRect();
-  const jarRect = jarWrap.getBoundingClientRect();
-  const mouthX = (jarRect.left + jarRect.width / 2) - papersRect.left + 45; // right side
-  const mouthY = (jarRect.top + jarRect.height / 2) - papersRect.top + 10;
-
   const W = papersWrap.clientWidth;
   const H = papersWrap.clientHeight;
 
-  const created = [];
+  // jar mouth position inside papers
+  const papersRect = papersWrap.getBoundingClientRect();
+  const jarRect = jarWrap.getBoundingClientRect();
+  const mouthX = (jarRect.left + jarRect.width / 2) - papersRect.left + 45;
+  const mouthY = (jarRect.top + jarRect.height / 2) - papersRect.top + 10;
 
-  // quick “burst spill” (short animation)
+  const PAPER_W = 140;
+  const PAPER_H = 96;
+
+  // create papers + physics state
+  const states = [];
+
   for (let i = 0; i < pool.length; i++) {
     const msg = pool[i];
     const preview = msg.slice(0, 22) + (msg.length > 22 ? "…" : "");
@@ -94,66 +95,138 @@ function spillBurstThenArrange() {
     p.style.left = mouthX + "px";
     p.style.top = mouthY + "px";
     p.addEventListener("click", () => openMessage(msg, p));
-
     papersWrap.appendChild(p);
-    created.push(p);
 
     const rot = rand(-25, 25);
-    const dx = rand(30, 220);          // pour outward
-    const dy = rand(-30, 140);         // slight up/down
-    const settleY = rand(180, H - 150); // temporary “floor” in box
 
-    const delay = i * 6;
+    // start with small random offsets and velocity
+    const s = {
+      el: p,
+      rot,
+      x: 0,
+      y: 0,
+      vx: rand(5, 12) + Math.random(),     // pour right
+      vy: rand(-3, 4) + Math.random(),
+      active: true
+    };
 
-    setTimeout(() => {
-      // stage 1: shoot out from mouth
-      p.animate(
-        [
-          { transform: `translate(0px,0px) rotate(${rot}deg)` },
-          { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)` }
-        ],
-        { duration: 280, easing: "cubic-bezier(.2,.9,.2,1)", fill: "forwards" }
-      );
-
-      // stage 2: drop down to a random temporary landing (avoids big pile)
-      setTimeout(() => {
-        p.animate(
-          [
-            { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)` },
-            { transform: `translate(${dx}px, ${settleY}px) rotate(${rot}deg)` }
-          ],
-          { duration: 420, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" }
-        );
-      }, 260);
-    }, delay);
+    // stagger release so it pours
+    s.startAt = performance.now() + i * 12;
+    states.push(s);
   }
 
-  // After burst, switch to tray layout
-  setTimeout(() => {
-    arrangeIntoScrollableGrid(created);
-  }, 1400);
+  // physics loop for ~2.2s
+  const gravity = 0.38;
+  const friction = 0.992;
+  const bounce = 0.72;
+
+  const minX = -mouthX + 10;
+  const maxX = (W - PAPER_W) - mouthX - 10;
+  const minY = -mouthY + 10;
+  const maxY = (H - PAPER_H) - mouthY - 10;
+
+  const start = performance.now();
+  const PHYS_MS = 2200;
+
+  function physicsTick(now) {
+    const t = now - start;
+
+    for (const s of states) {
+      if (now < s.startAt) continue;
+
+      // physics integration
+      s.vy += gravity;
+      s.vx *= friction;
+      s.vy *= friction;
+
+      s.x += s.vx;
+      s.y += s.vy;
+
+      // bounce off walls
+      if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
+      if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
+      if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
+      if (s.y > maxY) { s.y = maxY; s.vy *= -bounce; }
+
+      s.el.style.transform = `translate(${s.x}px, ${s.y}px) rotate(${s.rot}deg)`;
+    }
+
+    if (t < PHYS_MS) {
+      requestAnimationFrame(physicsTick);
+    } else {
+      // start the gentle "magnet into grid" phase
+      settleIntoGrid(states, mouthX, mouthY, W);
+    }
+  }
+
+  requestAnimationFrame(physicsTick);
 }
 
-function arrangeIntoScrollableGrid(papers) {
-  // Turn container into scroll tray
+// Smoothly animate each note into its final grid slot
+function settleIntoGrid(states, mouthX, mouthY, W) {
+  // build target grid positions (like auto-fill)
+  const gap = 14;
+  const tileW = 140;
+  const tileH = 96;
+
+  const usableW = papersWrap.clientWidth - 36; // tray padding we will add later
+  const cols = Math.max(1, Math.floor((usableW + gap) / (tileW + gap)));
+
+  const targets = states.map((s, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+
+    const tx = 18 + col * (tileW + gap);
+    const ty = 18 + row * (tileH + gap);
+
+    // convert to translate coords relative to mouth anchor
+    return {
+      s,
+      x: tx - mouthX,
+      y: ty - mouthY
+    };
+  });
+
+  // add a class so transform transitions smoothly
+  for (const { s } of targets) {
+    s.el.classList.remove("flying");
+    s.el.classList.add("settling");
+    s.el.style.opacity = 1;
+    // also slowly reduce rotation while settling
+    s.rot = rand(-6, 6);
+  }
+
+  // animate to targets with slight staggering for “organic” feel
+  targets.forEach(({ s, x, y }, i) => {
+    const delay = i * 6; // tiny cascade
+    setTimeout(() => {
+      s.el.style.transform = `translate(${x}px, ${y}px) rotate(${s.rot}deg)`;
+    }, delay);
+  });
+
+  // after they finish settling, convert to real scroll grid without a visual jump
+  setTimeout(() => {
+    convertToScrollableGrid(states);
+  }, 1050);
+}
+
+function convertToScrollableGrid(states) {
+  // turn into scroll tray + grid wrapper
   papersWrap.classList.add("tray");
 
-  // Make a grid wrapper
   const grid = document.createElement("div");
   grid.className = "papersGrid";
 
-  // Move notes into grid and remove flying shadow
-  papers.forEach((p) => {
-    p.classList.remove("flying");
-    p.style.opacity = 1;
-    p.style.transform = "";
-    grid.appendChild(p);
+  // Move elements into grid
+  // (they're already visually in place; this keeps layout stable for scrolling)
+  states.forEach(({ el }) => {
+    el.classList.remove("settling");
+    el.style.transform = ""; // grid will handle positioning now
+    grid.appendChild(el);
   });
 
   papersWrap.innerHTML = "";
   papersWrap.appendChild(grid);
-
-  // Scroll to top neatly
   papersWrap.scrollTop = 0;
 }
 
