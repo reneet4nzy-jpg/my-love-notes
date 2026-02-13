@@ -94,12 +94,6 @@ function spillPhysicsThenSettle() {
   const friction = 0.988;
   const bounce = 0.90;
 
-  // REAL walls/floor in container coords
-  const minX = 8;
-  const maxX = W - PAPER_W - 8;
-  const minY = 8;
-  const maxY = H - PAPER_H - 8;  // <-- true bottom edge
-
   const states = [];
 
   for (let i = 0; i < pool.length; i++) {
@@ -152,17 +146,28 @@ function spillPhysicsThenSettle() {
       s.x += s.vx;
       s.y += s.vy;
 
-      // Wall bounce
-      if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
-      if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
+      // Recalculate actual box size every frame
+const rect = papersWrap.getBoundingClientRect();
+const minX = 8;
+const maxX = rect.width - PAPER_W - 8;
+const minY = 8;
+const maxY = rect.height - PAPER_H - 8;
 
-      // Ceiling bounce
-      if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
+// Wall bounce
+if (s.x < minX) { s.x = minX; s.vx *= -bounce; }
+if (s.x > maxX) { s.x = maxX; s.vx *= -bounce; }
 
-      // FLOOR bounce (true bottom)
-      if (s.y > maxY) {
-        s.y = maxY;
-        s.vy *= -bounce;
+// Ceiling bounce
+if (s.y < minY) { s.y = minY; s.vy *= -bounce; }
+
+// TRUE bottom bounce
+if (s.y > maxY) {
+  s.y = maxY;
+  s.vy *= -bounce;
+
+  // stronger visible bounce
+  if (Math.abs(s.vy) < 3) s.vy = -rand(6, 12);
+}
 
         // pop so it visibly bounces
         if (Math.abs(s.vy) < 2.2) s.vy = -rand(4, 10);
