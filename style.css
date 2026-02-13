@@ -1,14 +1,18 @@
 .hidden { display:none !important; }
 
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  min-height:100vh;
-  display:grid;
-  place-items:center;
-  background:#faf7ff;
+:root{
+  --frame-pad: 110px;
+  --frame-pad-top: 90px;
 }
-html, body {
+
+@media (max-width: 820px){
+  :root{
+    --frame-pad: 46px;
+    --frame-pad-top: 40px;
+  }
+}
+
+html, body{
   height: 100%;
 }
 
@@ -16,18 +20,24 @@ body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
   min-height:100vh;
-  display:grid;
-  place-items:center;
   background:#faf7ff;
-  position: relative;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+html, body {
+  height: 100%;
 }
 
 main{
   box-sizing: border-box;
 
-  width: calc(100% - (var(--frame-pad) * 2));
+  /* inside the decorative frame */
+  width: min(980px, calc(100vw - (var(--frame-pad) * 2)));
   min-height: calc(100vh - (var(--frame-pad-top) + var(--frame-pad)));
 
+  padding-top: 0;
   margin-top: var(--frame-pad-top);
   margin-bottom: var(--frame-pad);
 
@@ -66,7 +76,7 @@ main{
 
 /* SCENE */
 .scene{
-  width:min(980px, 94vw);
+  width: 100%;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -292,17 +302,7 @@ height:480px;
    FRAME OVERLAY + SAFE AREA
 ========================= */
 
-:root{
-  --frame-pad: 110px;
-  --frame-pad-top: 90px;
-}
 
-@media (max-width: 820px){
-  :root{
-    --frame-pad: 46px;
-    --frame-pad-top: 40px;
-  }
-}
 
 /* frame image overlay */
 body::before{
