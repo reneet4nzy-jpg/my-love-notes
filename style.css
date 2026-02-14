@@ -126,18 +126,19 @@ body::before{
 
 .valentineTitle{
   position: relative;
-  align-self: flex-start;   /* allows left positioning */
-  
+  align-self: flex-start;
+
   font-family: "Times New Roman", Times, serif;
-  font-size: 18px;          /* smaller */
+  font-size: 18px;
   font-style: italic;
   color: #7a0f1d;
 
   margin-bottom: 8px;
 
-  /* move slightly left of center */
-  left: 15%;
+  left: 15%;   /* keeps it slightly off-center */
+  top: 10px;   /* ⬅️ move it lower */
 }
+
 /* =========================
    PAPERS BOX (always inside frame)
 ========================= */
