@@ -136,7 +136,7 @@ body::before{
   margin-bottom: 8px;
 
   left: 15%;   /* keeps it slightly off-center */
-  top: 45px;   /* ⬅️ move it lower */
+  top: 40px;   /* ⬅️ move it lower */
 }
 
 /* =========================
