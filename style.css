@@ -124,6 +124,16 @@ body::before{
 }
 .jar:active{ transform: scale(.98); }
 
+.valentineTitle{
+  font-family: "Times New Roman", Times, serif;
+  font-size: 32px;
+  color: #7a0f1d;
+  margin: 10px 0 12px 0;
+  text-align: center;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 12px rgba(122,15,29,.25);
+}
 /* =========================
    PAPERS BOX (always inside frame)
 ========================= */
