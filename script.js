@@ -7,17 +7,13 @@ const messages = [
    {
   preview: "you miss my AWESOME singing",
   text: `
-    <p>hey there miguel whats it liek in tekong camp im 22km away but man tonight you look so pretty yes you do, orchard cant shine half as bright as u my word is true.</p>
-
-    <p>hey there migugu dont you worry about the distance im right here if you get lonely give this sog another listen close your eyes. listen to my voice its my disguise, im by your side.</p>
+    <p>hey there miguel whats it liek in tekong camp im 22km away but man tonight you look so pretty yes you do, orchard cant shine half as bright as u my word is true.\nhey there migugu dont you worry about the distance im right here if you get lonely give this sog another listen close your eyes. listen to my voice its my disguise, im by your side.\ndont judge my singing i recorded this mid coding</p>
 
     <audio controls class="noteAudio">
       <source src="hey there delilah.m4a" type="audio/mp4">
       <source src="hey there delilah.m4a" type="audio/x-m4a">
       Your browser does not support audio.
     </audio>
-
-    <p>dont judge my singing i recorded this mid coding</p>
   `
 },
 {
