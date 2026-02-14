@@ -5,7 +5,7 @@ let lastOpenedPaper = null;
 
 const messages = [
    {
-    preview: "If I'm not responding but u miss me",
+    preview: "I'm not responding and u miss me",
     text: "Hii babyy I’m sorryy I must be busy for you to be here, but scroll around here until I’m back?\n\nI put little bits of me in all of these, so this might as well count as my presence.\n\nEnjoy scrolling my love."
   },
    {
@@ -16,6 +16,21 @@ const messages = [
     <audio controls class="noteAudio">
       <source src="hey there delilah.m4a" type="audio/mp4">
       <source src="hey there delilah.m4a" type="audio/x-m4a">
+      Your browser does not support audio.
+    </audio>
+  `
+},
+     {
+    preview: "Youre upset at me",
+    text: "Aww baby im sorry. i dont know what i did but will you calm down and then talk to me? we can work it out when youre ready. you mean everything to me. if you need to calm down theres a breathing exercise letter right beside this. im sorry, well work this out. i love you okay?"
+  },
+    {
+  preview: "you need to calm down",
+  text: `
+    hi baby, if you need to calm down, take some cold water and do some deep breathing. in for 5, hold for 1, out for 5.\nheres my breathing exercise, not perfect but it has background music and all hehe. repeat till calm!
+    <audio controls class="noteAudio">
+      <source src="breathing.m4a" type="audio/mp4">
+      <source src="breathing.m4a" type="audio/x-m4a">
       Your browser does not support audio.
     </audio>
   `
@@ -32,16 +47,6 @@ const messages = [
     </audio>
 
     <p>yappidy yap yap yap</p>
-  `
-},
- {
-  preview: "someone paused the music on your life",
-  text: `
-    <p>need some music to get the vibes right? heres a playlist of the daily songs hehe</p>
-
-    <p><a href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank" rel="noopener">
-      Cue the music!
-    </a></p>
   `
 },
 {
@@ -74,10 +79,29 @@ const messages = [
       <source src="goodnight.m4a" type="audio/x-m4a">
       Your browser does not support audio.
     </audio>
+mwah
+  `},
 
-    <p>mwah</p>
+   {
+    preview: "You feel like a bad bf/like i deserve better",
+    text: "I know how you feel. i often doubt if im a good gf, but just know ive never loved one like you. If you want to be better for me, thats great but that doesnt make you a bad bf. if you think i can do better youre wrong. you ARE better. youre better for me than you were yesterday and tomorrow you will be better than today and current you will always be the best for me because thats who you are, someone who always improves day by day for me. Thats what makes u beautiful. the fact that youre worried about being a bad bf shows u care. that alone makes u a great bf. You mess up sometimes, as do i and thats what it means to be human. i cant love a perfect robot. i love you as you are."
+  },
+
+    {
+    preview: "You feel yourself losing feelings",
+    text: "how dare you open this. Insert angry fist up emoji.\nso this is just in case, im praying you dont ever find a reason to open it but anyways just talk to me about it. like right now. we will figure out where to go from here or how to fix it. remember that i will always love you, even if you no longer love me. Jeez im crying as i write this i dont wanna think about it:("
+  },
+   
+    {
+  preview: "someone paused the music on your life",
+  text: `
+    <p>need some music to get the vibes right? heres a playlist of the daily songs hehe</p>
+
+    <p><a href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank" rel="noopener">
+      Cue the music!
+    </a></p>
   `
-}
+},
 ];
 
 /* ================= DOM ================= */
