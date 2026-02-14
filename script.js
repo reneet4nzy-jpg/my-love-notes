@@ -11,7 +11,7 @@ const messages = [
    {
   preview: "you miss my AWESOME singing",
   text: `
-    <p>hey there miguel whats it liek in tekong camp im 22km away but man tonight you look so pretty yes you do, orchard cant shine half as bright as u my word is true.\nhey there migugu dont you worry about the distance im right here if you get lonely give this sog another listen close your eyes. listen to my voice its my disguise, im by your side.\ndont judge my singing i recorded this mid coding</p>
+    hey there miguel whats it liek in tekong camp im 22km away but man tonight you look so pretty yes you do, orchard cant shine half as bright as u my word is true.\nhey there migugu dont you worry about the distance im right here if you get lonely give this sog another listen close your eyes. listen to my voice its my disguise, im by your side.\ndont judge my singing i recorded this mid coding
 
     <audio controls class="noteAudio">
       <source src="hey there delilah.m4a" type="audio/mp4">
@@ -22,12 +22,12 @@ const messages = [
 },
      {
     preview: "Youre upset at me",
-    text: "Aww baby im sorry. i dont know what i did but will you calm down and then talk to me? we can work it out when youre ready. you mean everything to me. if you need to calm down theres a breathing exercise letter right beside this. im sorry, well work this out. i love you okay?"
+    text: "Aww baby im sorry. i dont know what i did but will you calm down and then talk to me? we can work it out when youre ready. you mean everything to me. if you need to calm down theres a letter right beside this to help you calm down. im sorry, well work this out. i love you okay?"
   },
     {
   preview: "you need to calm down",
   text: `
-    hi baby, if you need to calm down, take some cold water and do some deep breathing. in for 5, hold for 1, out for 5.\nheres my breathing exercise, not perfect but it has background music and all hehe. repeat till calm!
+    hi baby, if you need to calm down, have some cold water and do some deep breathing. in for 5, hold for 1, out for 5.\nheres my breathing exercise, not perfect but it has background music and all hehe. repeat till calm!
     <audio controls class="noteAudio">
       <source src="breathing.m4a" type="audio/mp4">
       <source src="breathing.m4a" type="audio/x-m4a">
@@ -38,15 +38,14 @@ const messages = [
 {
   preview: "you miss my voice",
   text: `
-    <p>im with you always</p>
+    im with you always
 
     <audio controls class="noteAudio">
       <source src="youmissmyvoice.m4a" type="audio/mp4">
       <source src="youmissmyvoice.m4a" type="audio/x-m4a">
       Your browser does not support audio.
     </audio>
-
-    <p>yappidy yap yap yap</p>
+yappidy yap yap yap
   `
 },
 {
@@ -84,7 +83,7 @@ mwah
 
    {
     preview: "You feel like a bad bf/like i deserve better",
-    text: "I know how you feel. i often doubt if im a good gf, but just know ive never loved one like you. If you want to be better for me, thats great but that doesnt make you a bad bf. if you think i can do better youre wrong. you ARE better. youre better for me than you were yesterday and tomorrow you will be better than today and current you will always be the best for me because thats who you are, someone who always improves day by day for me. Thats what makes u beautiful. the fact that youre worried about being a bad bf shows u care. that alone makes u a great bf. You mess up sometimes, as do i and thats what it means to be human. i cant love a perfect robot. i love you as you are."
+    text: "I know how you feel but just know ive never loved one like you. If you want to be better for me thats great but it doesnt make you a bad bf now. if you think i can do better youre wrong you ARE better. youre better for me than you were yesterday and tomorrow you will be better than today. current you will always be the best for me because you are someone who always improves day by day for me, and i love it. the fact that youre worried about being a bad bf shows u care that alone makes u a great bf. You mess up sometimes as do i and thats what it means to be human. i love you as you are."
   },
 
     {
@@ -93,13 +92,13 @@ mwah
   },
    
     {
-  preview: "someone paused the music on your life",
+  preview: "someone paused the music",
   text: `
-    <p>need some music to get the vibes right? heres a playlist of the daily songs hehe</p>
+    need some music to get the vibes right? heres a playlist of the daily songs hehe
 
-    <p><a href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank" rel="noopener">
+    href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank" rel="noopener">
       Cue the music!
-    </a></p>
+    </a>
   `
 },
 ];
