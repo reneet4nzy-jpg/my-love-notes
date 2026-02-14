@@ -95,8 +95,7 @@ mwah
   preview: "someone paused the music",
   text: `
     need some music to get the vibes right? heres a playlist of the daily songs hehe
-
-    href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank" rel="noopener">
+<a href="https://open.spotify.com/playlist/5nZUJj0xljpS5s5ePFDckg?si=4b45bc1df3cb457e" target="_blank">
       Cue the music!
     </a>
   `
