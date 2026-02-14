@@ -89,9 +89,8 @@ function spillPhysicsThenOrganize() {
   papersWrap.innerHTML = "";
 
   // Build exactly 100 notes (repeat messages)
-  const pool = [];
-  while (pool.length < 100) pool.push(...messages);
-  pool.length = 100;
+ // Use only the messages you defined
+const pool = [...messages];
 
   // Jar mouth position inside papers
   const papersRect = papersWrap.getBoundingClientRect();
@@ -290,12 +289,11 @@ function openMessage(message, paperEl) {
 
   // message can be STRING or OBJECT
   if (typeof message === "object") {
-    // text
+
     const textEl = document.createElement("div");
-    textEl.innerHTML = message.text; || "";
+    textEl.innerHTML = message.text || "";
     modalText.appendChild(textEl);
 
-    // optional image
     if (message.img) {
       const imgEl = document.createElement("img");
       imgEl.src = message.img;
@@ -305,27 +303,13 @@ function openMessage(message, paperEl) {
       imgEl.style.boxShadow = "0 10px 25px rgba(0,0,0,.2)";
       modalText.appendChild(imgEl);
     }
+
   } else {
     modalText.textContent = message;
   }
 
   modal.classList.remove("hidden");
 }
-
-closeModal.addEventListener("click", closeModalFn);
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModalFn();
-});
-
-function closeModalFn() {
-  modal.classList.add("hidden");
-  modalText.textContent = "";
-  if (lastOpenedPaper) {
-    lastOpenedPaper.classList.remove("opened");
-    lastOpenedPaper.style.opacity = 1;
-  }
-}
-
 /* ================= UTILS ================= */
 
 function rand(min, max) {
