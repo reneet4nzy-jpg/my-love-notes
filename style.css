@@ -15,6 +15,13 @@
     --frame-pad-top: 40px;
   }
 }
+.noteVideo{
+  width: 100%;
+  max-height: 60vh;
+  border-radius: 14px;
+  display: block;
+  margin-top: 12px;
+}
 
 html, body{ height:100%; }
 
