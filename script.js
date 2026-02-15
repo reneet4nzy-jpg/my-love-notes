@@ -35,6 +35,10 @@ const messages = [
     </audio>
   `
 },
+      {
+    preview: "You need a confidence boost",
+    text: "things i love about you: \n-Your facial features\nyour strive to do better everytime you make a mistake\n-your kindness and genuineness\n-your face. 100%\nyour respectfullness to the people around you\nyour love for the important people in your life\nyour glorious countenance.\nthe list goes on. did i mention your face? okay but seriously thoug, come drop me a text i wanna understand what youre thinking or feeling. i love you."
+  },
 {
   preview: "you miss my voice",
   text: `
@@ -62,6 +66,8 @@ yappidy yap yap yap
     text: "A little kiss for u\nMwah, I love you.",
     img: "kisses.jpg"
   },
+
+
    
    {
     preview: "You angered me and dk what to do",
