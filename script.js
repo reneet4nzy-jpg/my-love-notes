@@ -105,10 +105,11 @@ mwah
   text: `
     rawr🔥
 
-    <video controls class="noteVideo">
-      <source src="firebreathing.mp4" type="video/mp4">
+    <video controls playsinline class="noteVideo">
+      <source src="firebreathing.m4v" type="video/mp4">
       Your browser does not support video.
     </video>
+    can u tell im running out of things to include
 
   `
 }
