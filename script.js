@@ -100,6 +100,18 @@ mwah
     </a>
   `
 },
+   {
+  preview: "you miss ur fire breathing gf",
+  text: `
+    rawr🔥
+
+    <video controls class="noteVideo">
+      <source src="firebreathing.mp4" type="video/mp4">
+      Your browser does not support video.
+    </video>
+
+  `
+}
 ];
 
 /* ================= DOM ================= */
